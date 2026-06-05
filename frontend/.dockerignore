@@ -1,0 +1,6 @@
+# Purpose: Keeps local dependencies and generated bundles out of the frontend
+# Docker build context.
+node_modules
+dist
+npm-debug.log
+.env

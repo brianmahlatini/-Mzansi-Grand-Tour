@@ -1,0 +1,6 @@
+# Purpose: Prevents local dependencies and temporary files from being copied
+# into the backend image.
+node_modules
+npm-debug.log
+.env
+coverage
