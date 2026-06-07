@@ -3,6 +3,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AuthProvider } from "./auth/AuthProvider";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
+import { EnterpriseChatbot } from "./components/chat/EnterpriseChatbot";
 import { DashboardLayout } from "./components/dashboard/DashboardLayout";
 import { PublicLayout } from "./components/layout/PublicLayout";
 import { useTourismData } from "./hooks/useTourismData";
@@ -53,6 +54,7 @@ export function App() {
             </Route>
           </Route>
         </Routes>
+        <EnterpriseChatbot />
       </AuthProvider>
     </BrowserRouter>
   );

@@ -12,6 +12,8 @@ The first registered account automatically becomes `ADMIN`. Every later registra
 - JWT-protected API routes.
 - Admin dashboard for platform metrics, users, leads, bookings, booking status management, and audit visibility.
 - User dashboard for owned bookings, next-trip visibility, and booking cancellation.
+- Enterprise AI chatbot for South Africa trip help, booking support, cancellations, admin/user guidance, and platform questions.
+- Server-side OpenAI integration through `OPENAI_API_KEY`; the browser never receives the API key.
 - PostgreSQL stores users, leads, bookings, packages, and audit events.
 - MongoDB stores flexible content: destinations, experiences, and stories.
 - React Router routes for public pages, auth, admin, and user account areas.
@@ -74,6 +76,8 @@ docker compose up --build
 | `/admin/users` | Admin user overview |
 | `/account` | User trip dashboard |
 
+The floating **Mzansi Concierge** assistant appears across public pages and dashboards.
+
 ## Backend API
 
 ### Public
@@ -135,6 +139,26 @@ PATCH /api/me/bookings/:id/cancel
 POST  /api/bookings
 ```
 
+### AI Concierge
+
+```text
+POST /api/chat
+```
+
+Body:
+
+```json
+{
+  "message": "How do I cancel a booking?",
+  "context": {
+    "path": "/account",
+    "role": "USER"
+  }
+}
+```
+
+The backend uses OpenAI when `OPENAI_API_KEY` is configured. If no key is configured, the endpoint returns local fallback help so the chat UI still works in development.
+
 Cancel body:
 
 ```json
@@ -187,6 +211,7 @@ backend/
     routes/
       adminRoutes.js
       authRoutes.js
+      chatRoutes.js
       contentRoutes.js
       conversionRoutes.js
       userRoutes.js
@@ -200,6 +225,7 @@ frontend/
     api/
     auth/
     components/
+      chat/
       common/
       dashboard/
       forms/
@@ -295,9 +321,13 @@ MONGO_URI
 CORS_ORIGIN
 JWT_SECRET
 JWT_EXPIRES_IN
+OPENAI_API_KEY
+OPENAI_CHAT_MODEL
 ```
 
 Use a strong `JWT_SECRET` outside local development.
+
+Never commit real API keys. If an API key is pasted into chat, logs, screenshots, or GitHub by accident, revoke it and create a new one.
 
 ## Production Notes
 

@@ -19,5 +19,9 @@ export const env = {
   jwt: {
     secret: process.env.JWT_SECRET || "local-development-secret-change-me",
     expiresIn: process.env.JWT_EXPIRES_IN || "7d"
+  },
+  openai: {
+    apiKey: process.env.OPENAI_API_KEY || "",
+    chatModel: process.env.OPENAI_CHAT_MODEL || "gpt-4.1-mini"
   }
 };
