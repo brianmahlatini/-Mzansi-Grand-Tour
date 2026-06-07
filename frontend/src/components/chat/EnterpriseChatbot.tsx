@@ -99,8 +99,9 @@ export function EnterpriseChatbot() {
               </span>
             </div>
             <div className="chatbot-header-actions">
-              <button type="button" aria-label="Clear chat" title="Clear chat" onClick={clearChat}>
+              <button className="chatbot-clear-button" type="button" aria-label="Clear chat messages" onClick={clearChat}>
                 <RotateCcw size={17} />
+                Clear chat
               </button>
               <button type="button" aria-label="Close chat" title="Close chat" onClick={() => setIsOpen(false)}>
                 <X size={18} />
