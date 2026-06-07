@@ -159,7 +159,7 @@ Body:
 
 The backend uses OpenAI when `OPENAI_API_KEY` is configured. If no key is configured, the endpoint returns local fallback help so the chat UI still works in development. The assistant can answer general questions, but it uses platform context when users ask about destinations, bookings, cancellations, admin, user dashboards, MongoDB, PostgreSQL, or routes.
 
-The chat request can include recent messages so follow-up questions such as "tell me more" or "best for beaches" keep useful context instead of returning generic help. The local fallback also understands common tourism intents and typo-heavy prompts such as "capetown", "recommend best place", and "which activity should I do".
+The chat request can include recent user messages so follow-up questions such as "tell me more" or "best for beaches" keep useful context instead of returning generic help. The local fallback ignores assistant welcome text when remembering destinations, prioritizes booking/admin support questions, and understands common tourism intents plus typo-heavy prompts such as "capetown", "recommend best place", and "which activity should I do".
 
 Cancel body:
 

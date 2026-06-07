@@ -80,6 +80,10 @@ function hasAny(text, terms) {
   return terms.some((term) => text.includes(term));
 }
 
+function rejectsPreviousChoice(text) {
+  return hasAny(text, ["dont want", "don t want", "do not want", "not that", "no thanks", "no thank you", "didnt say", "didn t say", "i never said", "not cape town"]);
+}
+
 function detectDestination(text) {
   const compactText = text.replace(/\s+/g, "");
   return Object.values(destinationGuide).find((destination) =>
@@ -88,7 +92,11 @@ function detectDestination(text) {
 }
 
 function latestHistoryDestination(history) {
-  const userMessages = history.filter((item) => item.role === "user").map((item) => cleanText(item.content)).reverse();
+  const userMessages = history
+    .filter((item) => item.role === "user")
+    .map((item) => cleanText(item.content))
+    .filter((content) => !rejectsPreviousChoice(content))
+    .reverse();
   return userMessages.map(detectDestination).find(Boolean);
 }
 
@@ -113,9 +121,10 @@ function destinationActivities(destination) {
 function localFallback(message, history = []) {
   const lower = message.toLowerCase();
   const normalized = cleanText(message);
-  const recentText = [...history.map((item) => item.content), message].join(" ").toLowerCase();
+  const userRecentText = [...history.filter((item) => item.role === "user").map((item) => item.content), message].join(" ").toLowerCase();
   const currentDestination = detectDestination(normalized);
   const conversationDestination = currentDestination || latestHistoryDestination(history);
+  const rejectsChoice = rejectsPreviousChoice(normalized);
   const asksForMore = /^(yes|yeah|yep|sure|ok|okay)\b/.test(normalized) || hasAny(normalized, ["tell me more", "more detail", "explain more"]);
   const asksRecommendation = hasAny(normalized, ["recommend", "reccomend", "recomend", "reocm", "best place", "bestplace", "where should", "where to go", "suggest"]);
   const asksActivities = hasAny(normalized, ["activity", "activities", "things to do", "what should i do", "which activity", "do there"]);
@@ -128,6 +137,22 @@ function localFallback(message, history = []) {
 
   if (["hi", "hie", "hello", "hey", "howzit", "sawubona"].includes(normalized)) {
     return "Hello, welcome to Mzansi Grand Tour. How can I help you plan your South Africa trip today? I can help with Cape Town, Kruger safari, Garden Route, Drakensberg, bookings, cancellations, or account support.";
+  }
+
+  if (lower.includes("admin")) {
+    return "Admins can register as the first account, then use /admin to see metrics, users, leads, bookings, and manage booking statuses.";
+  }
+
+  if (lower.includes("book") || lower.includes("booking") || lower.includes("cancel")) {
+    return "To book a trip, register or login, then open /plan and send your destination, dates, group size, budget, and travel style. Your booking request is saved in PostgreSQL, visible in your /account dashboard, and admins can review it from /admin/bookings. To cancel, go to /account, choose your booking, and submit a cancellation reason.";
+  }
+
+  if (lower.includes("mongo")) {
+    return "MongoDB stores flexible tourism content: destinations, experiences, and stories. PostgreSQL stores users, leads, bookings, packages, and audit events.";
+  }
+
+  if (rejectsChoice) {
+    return "No problem, we can skip that. Tell me what you prefer instead: safari, beaches, Garden Route road trip, warm Durban coast, Drakensberg mountains, food and wine, family travel, budget travel, or help using bookings on this platform.";
   }
 
   if (asksActivities && conversationDestination) {
@@ -178,28 +203,16 @@ function localFallback(message, history = []) {
     return "The best South Africa activities to sell the trip are: Table Mountain, Cape Peninsula and Boulders penguins, Franschhoek or Stellenbosch wine tasting, Greater Kruger game drives, Garden Route lagoon and forest experiences, Robben Island history, Bo-Kaap food culture, and Drakensberg hiking. For a first trip, choose Cape Town activities plus 3 nights of safari.";
   }
 
-  if (recentText.includes("cape town")) {
+  if (userRecentText.includes("cape town") || userRecentText.includes("capetown")) {
     return "Because we are talking about Cape Town, I can help with specific beaches, activities, food and wine, hotels, day trips, or a full itinerary. Best quick pick: Table Mountain, Cape Peninsula with Boulders penguins, Bo-Kaap, Robben Island, Camps Bay or Clifton, and one wine country day.";
   }
 
-  if (recentText.includes("beach") || recentText.includes("beaches")) {
+  if (userRecentText.includes("beach") || userRecentText.includes("beaches")) {
     return "For a beach-focused South Africa trip, I would shortlist Cape Town, Durban/KwaZulu-Natal, and the Garden Route. Cape Town is best for scenery and premium hotels, Durban is best for warm water, and the Garden Route is best for relaxed coastal touring.";
   }
 
-  if (recentText.includes("kruger") || recentText.includes("safari")) {
+  if (userRecentText.includes("kruger") || userRecentText.includes("safari")) {
     return "For safari, Greater Kruger is the safest premium recommendation. Spend 3 to 4 nights there, ideally after Cape Town, so the trip balances city, coast, wine, and wildlife.";
-  }
-
-  if (lower.includes("admin")) {
-    return "Admins can register as the first account, then use /admin to see metrics, users, leads, bookings, and manage booking statuses.";
-  }
-
-  if (lower.includes("booking") || lower.includes("cancel")) {
-    return "To create a booking, register or login, then visit /plan. Users can cancel their own bookings from /account. Admins can manage all bookings from /admin/bookings.";
-  }
-
-  if (lower.includes("mongo")) {
-    return "MongoDB stores flexible tourism content: destinations, experiences, and stories. PostgreSQL stores users, leads, bookings, packages, and audit events.";
   }
 
   return "I can help you choose South Africa destinations, compare Cape Town, Kruger, Garden Route, Durban, and Drakensberg, plan bookings, explain cancellations, or guide you through admin and user dashboards. Tell me your travel style, dates, budget, or destination interest and I will suggest the best next step.";
