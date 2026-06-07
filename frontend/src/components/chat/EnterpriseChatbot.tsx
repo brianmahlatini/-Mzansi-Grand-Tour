@@ -1,16 +1,10 @@
 // Purpose: Provides a polished floating AI concierge that answers general
 // questions plus tourism, booking, admin, user, and platform-help questions.
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
-import { Bot, Loader2, MessageCircle, RotateCcw, Send, X } from "lucide-react";
+import { Bot, Loader2, MessageCircle, Send, Trash2, X } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { askConcierge, type ChatMessage } from "../../api/chatApi";
 import { useAuth } from "../../auth/AuthProvider";
-
-const starterPrompts = [
-  "Plan Cape Town and Kruger",
-  "Help me book a trip",
-  "Explain admin and user access"
-];
 
 const welcomeMessage: ChatMessage = {
   id: "welcome",
@@ -103,8 +97,8 @@ export function EnterpriseChatbot() {
             </div>
             <div className="chatbot-header-actions">
               <button className="chatbot-clear-button" type="button" aria-label="Clear chat messages" onClick={clearChat}>
-                <RotateCcw size={17} />
-                Clear chat
+                <Trash2 size={16} />
+                Clear
               </button>
               <button type="button" aria-label="Close chat" title="Close chat" onClick={() => setIsOpen(false)}>
                 <X size={18} />
@@ -124,14 +118,6 @@ export function EnterpriseChatbot() {
               </article>
             )}
             <div ref={messagesEndRef} />
-          </div>
-          <div className="chatbot-helper-line">Popular requests</div>
-          <div className="chatbot-prompts">
-            {starterPrompts.map((prompt) => (
-              <button key={prompt} type="button" onClick={() => sendMessage(prompt)}>
-                {prompt}
-              </button>
-            ))}
           </div>
           <form onSubmit={handleSubmit}>
             <input name="message" placeholder="Ask about South Africa travel, bookings, or your account..." autoComplete="off" />

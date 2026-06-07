@@ -1080,7 +1080,7 @@ h3 {
   width: min(520px, calc(100vw - 32px));
   max-height: min(82vh, 760px);
   display: grid;
-  grid-template-rows: auto minmax(220px, 1fr) auto auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -1094,7 +1094,7 @@ h3 {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 15px 16px;
+  padding: 12px 14px;
   background: var(--night);
   color: white;
 }
@@ -1114,10 +1114,10 @@ h3 {
 .chatbot-panel header small {
   color: rgba(255, 255, 255, 0.72);
   line-height: 1.35;
+  font-size: 0.86rem;
 }
 
 .chatbot-panel header button,
-.chatbot-prompts button,
 .chatbot-panel form button {
   border: 0;
   border-radius: 8px;
@@ -1132,7 +1132,7 @@ h3 {
 }
 
 .chatbot-panel header button {
-  min-height: 36px;
+  min-height: 34px;
   display: grid;
   place-items: center;
   background: rgba(255, 255, 255, 0.1);
@@ -1151,11 +1151,12 @@ h3 {
   gap: 7px;
   font-weight: 800;
   background: rgba(226, 168, 59, 0.22) !important;
+  font-size: 0.86rem;
 }
 
 .chatbot-messages {
-  min-height: 340px;
-  max-height: none;
+  min-height: 280px;
+  max-height: calc(82vh - 142px);
   display: grid;
   align-content: start;
   gap: 10px;
@@ -1189,36 +1190,11 @@ h3 {
   color: white;
 }
 
-.chatbot-helper-line {
-  padding: 0 16px 8px;
-  background: rgba(250, 247, 239, 0.92);
-  color: var(--muted);
-  font-size: 0.78rem;
-  font-weight: 900;
-  text-transform: uppercase;
-}
-
-.chatbot-prompts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 0 16px 12px;
-  background: rgba(250, 247, 239, 0.92);
-}
-
-.chatbot-prompts button {
-  padding: 8px 10px;
-  background: rgba(47, 107, 95, 0.11);
-  color: var(--fynbos);
-  font-size: 0.78rem;
-  font-weight: 800;
-}
-
 .chatbot-panel form {
   display: grid;
   grid-template-columns: 1fr 44px;
   gap: 8px;
-  padding: 13px 16px 16px;
+  padding: 12px;
   border-top: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.56);
 }
@@ -1404,13 +1380,13 @@ th {
   }
 
   .chatbot-panel header {
-    align-items: flex-start;
-    flex-direction: column;
+    align-items: center;
+    flex-direction: row;
   }
 
   .chatbot-header-actions {
-    width: 100%;
-    justify-content: space-between;
+    width: auto;
+    justify-content: flex-end;
   }
 
   .chatbot-message {
