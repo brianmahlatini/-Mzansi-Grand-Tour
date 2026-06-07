@@ -1,7 +1,7 @@
-// Purpose: Provides a polished floating AI concierge that answers tourism,
-// booking, admin, user, and platform-help questions from any route.
+// Purpose: Provides a polished floating AI concierge that answers general
+// questions plus tourism, booking, admin, user, and platform-help questions.
 import { FormEvent, useMemo, useState } from "react";
-import { Bot, Loader2, MessageCircle, Send, X } from "lucide-react";
+import { Bot, Loader2, MessageCircle, RotateCcw, Send, X } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { askConcierge, type ChatMessage } from "../../api/chatApi";
 import { useAuth } from "../../auth/AuthProvider";
@@ -10,20 +10,21 @@ const starterPrompts = [
   "Help me choose between Cape Town and Kruger",
   "How do I create or cancel a booking?",
   "What can an admin see?",
-  "What does MongoDB store here?"
+  "What does MongoDB store here?",
+  "Answer a general travel question"
 ];
+
+const welcomeMessage: ChatMessage = {
+  id: "welcome",
+  role: "assistant",
+  content:
+    "Hi, I am Mzansi Concierge. Ask me anything. I can help with South Africa trips, bookings, cancellations, admin dashboards, user accounts, this platform, or general questions."
+};
 
 export function EnterpriseChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSending, setIsSending] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: "welcome",
-      role: "assistant",
-      content:
-        "Hi, I am Mzansi Concierge. I can help with South Africa trips, bookings, cancellations, admin dashboards, user accounts, and how this platform works."
-    }
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>([welcomeMessage]);
   const { user } = useAuth();
   const location = useLocation();
 
@@ -81,6 +82,10 @@ export function EnterpriseChatbot() {
     void sendMessage(content);
   }
 
+  function clearChat() {
+    setMessages([{ ...welcomeMessage, id: crypto.randomUUID() }]);
+  }
+
   return (
     <div className="chatbot">
       {isOpen && (
@@ -90,12 +95,17 @@ export function EnterpriseChatbot() {
               <Bot size={20} />
               <span>
                 <strong>Mzansi Concierge</strong>
-                <small>AI travel and platform help</small>
+                <small>AI assistant for travel, platform help, and general questions</small>
               </span>
             </div>
-            <button type="button" aria-label="Close chat" onClick={() => setIsOpen(false)}>
-              <X size={18} />
-            </button>
+            <div className="chatbot-header-actions">
+              <button type="button" aria-label="Clear chat" title="Clear chat" onClick={clearChat}>
+                <RotateCcw size={17} />
+              </button>
+              <button type="button" aria-label="Close chat" title="Close chat" onClick={() => setIsOpen(false)}>
+                <X size={18} />
+              </button>
+            </div>
           </header>
           <div className="chatbot-messages">
             {messages.map((message) => (
@@ -118,7 +128,7 @@ export function EnterpriseChatbot() {
             ))}
           </div>
           <form onSubmit={handleSubmit}>
-            <input name="message" placeholder="Ask about trips, bookings, admin, MongoDB..." autoComplete="off" />
+            <input name="message" placeholder="Ask anything..." autoComplete="off" />
             <button type="submit" aria-label="Send chat message">
               <Send size={17} />
             </button>

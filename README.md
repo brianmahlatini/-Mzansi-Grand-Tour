@@ -12,7 +12,7 @@ The first registered account automatically becomes `ADMIN`. Every later registra
 - JWT-protected API routes.
 - Admin dashboard for platform metrics, users, leads, bookings, booking status management, and audit visibility.
 - User dashboard for owned bookings, next-trip visibility, and booking cancellation.
-- Enterprise AI chatbot for South Africa trip help, booking support, cancellations, admin/user guidance, and platform questions.
+- Enterprise AI chatbot for general questions plus South Africa trip help, booking support, cancellations, admin/user guidance, and platform questions.
 - Server-side OpenAI integration through `OPENAI_API_KEY`; the browser never receives the API key.
 - PostgreSQL stores users, leads, bookings, packages, and audit events.
 - MongoDB stores flexible content: destinations, experiences, and stories.
@@ -76,7 +76,7 @@ docker compose up --build
 | `/admin/users` | Admin user overview |
 | `/account` | User trip dashboard |
 
-The floating **Mzansi Concierge** assistant appears across public pages and dashboards.
+The floating **Mzansi Concierge** assistant appears across public pages and dashboards. It includes starter prompts and a clear chat button.
 
 ## Backend API
 
@@ -157,7 +157,7 @@ Body:
 }
 ```
 
-The backend uses OpenAI when `OPENAI_API_KEY` is configured. If no key is configured, the endpoint returns local fallback help so the chat UI still works in development.
+The backend uses OpenAI when `OPENAI_API_KEY` is configured. If no key is configured, the endpoint returns local fallback help so the chat UI still works in development. The assistant can answer general questions, but it uses platform context when users ask about destinations, bookings, cancellations, admin, user dashboards, MongoDB, PostgreSQL, or routes.
 
 Cancel body:
 
