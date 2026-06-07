@@ -309,6 +309,15 @@ node --check backend/src/routes/adminRoutes.js
 
 Backend environment variables are documented in `backend/.env.example`.
 
+For local AI chat, create a private file named `backend/.env` and put your real key there:
+
+```env
+OPENAI_API_KEY=your-real-key
+OPENAI_CHAT_MODEL=gpt-4.1-mini
+```
+
+`backend/.env` is ignored by Git. Do not put real keys in `backend/.env.example`.
+
 Important values:
 
 ```text

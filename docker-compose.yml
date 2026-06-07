@@ -7,6 +7,8 @@ services:
     container_name: mzansi-backend
     env_file:
       - ./backend/.env.example
+      - path: ./backend/.env
+        required: false
     environment:
       NODE_ENV: development
       PORT: 5000

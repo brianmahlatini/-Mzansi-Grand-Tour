@@ -1,30 +1,29 @@
 // Purpose: Provides a polished floating AI concierge that answers general
 // questions plus tourism, booking, admin, user, and platform-help questions.
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Bot, Loader2, MessageCircle, RotateCcw, Send, X } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { askConcierge, type ChatMessage } from "../../api/chatApi";
 import { useAuth } from "../../auth/AuthProvider";
 
 const starterPrompts = [
-  "Help me choose between Cape Town and Kruger",
-  "How do I create or cancel a booking?",
-  "What can an admin see?",
-  "What does MongoDB store here?",
-  "Answer a general travel question"
+  "Plan Cape Town and Kruger",
+  "Help me book a trip",
+  "Explain admin and user access"
 ];
 
 const welcomeMessage: ChatMessage = {
   id: "welcome",
   role: "assistant",
   content:
-    "Hi, I am Mzansi Concierge. Ask me anything. I can help with South Africa trips, bookings, cancellations, admin dashboards, user accounts, this platform, or general questions."
+    "Welcome to Mzansi Grand Tour. I am your AI concierge for South Africa travel.\n\nTell me what you need: safari, Cape Town, Garden Route, wine country, bookings, cancellations, or help using your account."
 };
 
 export function EnterpriseChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([welcomeMessage]);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const { user } = useAuth();
   const location = useLocation();
 
@@ -35,6 +34,10 @@ export function EnterpriseChatbot() {
     }),
     [location.pathname, user?.role]
   );
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [messages, isSending]);
 
   async function sendMessage(content: string) {
     if (!content.trim()) {
@@ -95,7 +98,7 @@ export function EnterpriseChatbot() {
               <Bot size={20} />
               <span>
                 <strong>Mzansi Concierge</strong>
-                <small>AI assistant for travel, platform help, and general questions</small>
+                <small>South Africa travel and platform assistant</small>
               </span>
             </div>
             <div className="chatbot-header-actions">
@@ -120,7 +123,9 @@ export function EnterpriseChatbot() {
                 Thinking...
               </article>
             )}
+            <div ref={messagesEndRef} />
           </div>
+          <div className="chatbot-helper-line">Popular requests</div>
           <div className="chatbot-prompts">
             {starterPrompts.map((prompt) => (
               <button key={prompt} type="button" onClick={() => sendMessage(prompt)}>
@@ -129,7 +134,7 @@ export function EnterpriseChatbot() {
             ))}
           </div>
           <form onSubmit={handleSubmit}>
-            <input name="message" placeholder="Ask anything..." autoComplete="off" />
+            <input name="message" placeholder="Ask about South Africa travel, bookings, or your account..." autoComplete="off" />
             <button type="submit" aria-label="Send chat message">
               <Send size={17} />
             </button>
