@@ -76,7 +76,7 @@ docker compose up --build
 | `/admin/users` | Admin user overview |
 | `/account` | User trip dashboard |
 
-The floating **Mzansi Concierge** assistant appears across public pages and dashboards. It includes starter prompts and a clear chat button.
+The floating **Mzansi Concierge** assistant appears across public pages and dashboards. It includes a focused chat window, clear chat control, close control, and contextual follow-up handling.
 
 ## Backend API
 
@@ -158,6 +158,8 @@ Body:
 ```
 
 The backend uses OpenAI when `OPENAI_API_KEY` is configured. If no key is configured, the endpoint returns local fallback help so the chat UI still works in development. The assistant can answer general questions, but it uses platform context when users ask about destinations, bookings, cancellations, admin, user dashboards, MongoDB, PostgreSQL, or routes.
+
+The chat request can include recent messages so follow-up questions such as "tell me more" or "best for beaches" keep useful context instead of returning generic help.
 
 Cancel body:
 

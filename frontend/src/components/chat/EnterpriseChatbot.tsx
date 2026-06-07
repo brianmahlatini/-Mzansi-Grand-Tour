@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Bot, Loader2, MessageCircle, Send, Trash2, X } from "lucide-react";
 import { useLocation } from "react-router-dom";
-import { askConcierge, type ChatMessage } from "../../api/chatApi";
+import { askConciergeWithHistory, type ChatMessage } from "../../api/chatApi";
 import { useAuth } from "../../auth/AuthProvider";
 
 const welcomeMessage: ChatMessage = {
@@ -48,7 +48,7 @@ export function EnterpriseChatbot() {
     setIsSending(true);
 
     try {
-      const answer = await askConcierge(content, context);
+      const answer = await askConciergeWithHistory(content, context, [...messages, userMessage]);
       setMessages((current) => [
         ...current,
         {

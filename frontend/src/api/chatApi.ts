@@ -16,10 +16,25 @@ interface ChatResponse {
 }
 
 export async function askConcierge(message: string, context: { path: string; role?: string }): Promise<string> {
+  return askConciergeWithHistory(message, context, []);
+}
+
+export async function askConciergeWithHistory(
+  message: string,
+  context: { path: string; role?: string },
+  messages: ChatMessage[]
+): Promise<string> {
   const response = await fetch(`${API_URL}/chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message, context })
+    body: JSON.stringify({
+      message,
+      context,
+      messages: messages.slice(-8).map((item) => ({
+        role: item.role,
+        content: item.content
+      }))
+    })
   });
 
   if (!response.ok) {
