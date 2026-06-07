@@ -15,5 +15,9 @@ export const env = {
     user: process.env.POSTGRES_USER || "tourism_admin",
     password: process.env.POSTGRES_PASSWORD || "tourism_password"
   },
-  mongoUri: process.env.MONGO_URI || "mongodb://localhost:27017/tourism_content"
+  mongoUri: process.env.MONGO_URI || "mongodb://localhost:27017/tourism_content",
+  jwt: {
+    secret: process.env.JWT_SECRET || "local-development-secret-change-me",
+    expiresIn: process.env.JWT_EXPIRES_IN || "7d"
+  }
 };

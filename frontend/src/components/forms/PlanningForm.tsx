@@ -2,7 +2,9 @@
 // intent to the backend PostgreSQL booking endpoint.
 import { FormEvent, useMemo, useState } from "react";
 import { CalendarDays } from "lucide-react";
+import { Link } from "react-router-dom";
 import { submitBooking } from "../../api/tourismApi";
+import { useAuth } from "../../auth/AuthProvider";
 import type { BookingPayload, Destination } from "../../types/tourism";
 
 type FormStatus = "idle" | "loading" | "success" | "error";
@@ -13,10 +15,15 @@ function readString(form: FormData, key: keyof BookingPayload): string {
 
 export function PlanningForm({ destinations }: { destinations: Destination[] }) {
   const [status, setStatus] = useState<FormStatus>("idle");
+  const { user } = useAuth();
   const destinationOptions = useMemo(() => destinations.map((item) => item.name), [destinations]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!user) {
+      setStatus("error");
+      return;
+    }
     setStatus("loading");
 
     const form = new FormData(event.currentTarget);
@@ -87,7 +94,12 @@ export function PlanningForm({ destinations }: { destinations: Destination[] }) 
         {status === "loading" ? "Sending..." : "Request a proposal"}
       </button>
       {status === "success" && <p className="form-status success">Request received. The travel team has the details.</p>}
-      {status === "error" && <p className="form-status error">The request could not be sent yet. Please try again.</p>}
+      {status === "error" && (
+        <p className="form-status error">
+          {user ? "The request could not be sent yet. Please try again." : "Please login before creating a booking. "}
+          {!user && <Link to="/auth">Login or register</Link>}
+        </p>
+      )}
     </form>
   );
 }

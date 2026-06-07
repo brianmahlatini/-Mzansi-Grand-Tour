@@ -6,5 +6,6 @@ export const navigationItems = [
   { label: "Journeys", path: "/journeys" },
   { label: "Experiences", path: "/experiences" },
   { label: "Stories", path: "/stories" },
-  { label: "Plan", path: "/plan" }
+  { label: "Plan", path: "/plan" },
+  { label: "Login", path: "/auth" }
 ];

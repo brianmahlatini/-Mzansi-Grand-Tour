@@ -1,5 +1,5 @@
-// Purpose: Owns the PostgreSQL connection pool and creates transactional tables
-// for leads, bookings, and curated itinerary packages when the API starts.
+// Purpose: Owns the PostgreSQL connection pool and creates auth, booking,
+// lead, package, and audit tables when the API starts.
 import pg from "pg";
 import { env } from "../config/env.js";
 
@@ -13,8 +13,20 @@ export const pool = new Pool({
 
 export async function initializePostgres() {
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id SERIAL PRIMARY KEY,
+      username VARCHAR(80) UNIQUE NOT NULL,
+      email VARCHAR(160) UNIQUE NOT NULL,
+      password_hash TEXT NOT NULL,
+      role VARCHAR(20) NOT NULL CHECK (role IN ('ADMIN', 'USER')),
+      status VARCHAR(30) DEFAULT 'active',
+      last_login_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+
     CREATE TABLE IF NOT EXISTS leads (
       id SERIAL PRIMARY KEY,
+      user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
       full_name VARCHAR(120) NOT NULL,
       email VARCHAR(160) NOT NULL,
       travel_style VARCHAR(80) NOT NULL,
@@ -24,6 +36,7 @@ export async function initializePostgres() {
 
     CREATE TABLE IF NOT EXISTS bookings (
       id SERIAL PRIMARY KEY,
+      user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
       full_name VARCHAR(120) NOT NULL,
       email VARCHAR(160) NOT NULL,
       destination VARCHAR(120) NOT NULL,
@@ -32,8 +45,15 @@ export async function initializePostgres() {
       budget_range VARCHAR(80) NOT NULL,
       notes TEXT,
       status VARCHAR(40) DEFAULT 'new',
+      cancellation_reason TEXT,
+      cancelled_at TIMESTAMPTZ,
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
+
+    ALTER TABLE leads ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id) ON DELETE SET NULL;
+    ALTER TABLE bookings ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id) ON DELETE SET NULL;
+    ALTER TABLE bookings ADD COLUMN IF NOT EXISTS cancellation_reason TEXT;
+    ALTER TABLE bookings ADD COLUMN IF NOT EXISTS cancelled_at TIMESTAMPTZ;
 
     CREATE TABLE IF NOT EXISTS packages (
       id SERIAL PRIMARY KEY,
@@ -43,6 +63,16 @@ export async function initializePostgres() {
       duration_days INTEGER NOT NULL,
       price_from_usd INTEGER NOT NULL,
       highlights TEXT[] NOT NULL,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    );
+
+    CREATE TABLE IF NOT EXISTS audit_events (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+      action VARCHAR(120) NOT NULL,
+      entity_type VARCHAR(80) NOT NULL,
+      entity_id VARCHAR(80),
+      metadata JSONB DEFAULT '{}'::jsonb,
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
   `);

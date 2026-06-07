@@ -1,6 +1,7 @@
 // Purpose: Wraps frontend API calls and falls back to bundled data when the
 // backend is not yet available during design previews.
 import { fallbackDestinations, fallbackExperiences, fallbackPackages, fallbackStories } from "../data/fallbackData";
+import { getStoredToken } from "../lib/session";
 import type { BookingPayload, Destination, Experience, JourneyPackage, LeadPayload, Story } from "../types/tourism";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
@@ -43,9 +44,13 @@ export function getPackages(): Promise<JourneyPackage[]> {
 }
 
 export async function submitLead(payload: LeadPayload): Promise<ApiListResponse<unknown>> {
+  const token = getStoredToken();
   const response = await fetch(`${API_URL}/leads`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    },
     body: JSON.stringify(payload)
   });
 
@@ -57,9 +62,13 @@ export async function submitLead(payload: LeadPayload): Promise<ApiListResponse<
 }
 
 export async function submitBooking(payload: BookingPayload): Promise<ApiListResponse<unknown>> {
+  const token = getStoredToken();
   const response = await fetch(`${API_URL}/bookings`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {})
+    },
     body: JSON.stringify(payload)
   });
 

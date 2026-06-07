@@ -3,10 +3,13 @@
 import { useState } from "react";
 import { Menu, Plane } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../../auth/AuthProvider";
 import { navigationItems } from "./navigation";
 
 export function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user } = useAuth();
+  const dashboardPath = user?.role === "ADMIN" ? "/admin" : "/account";
 
   return (
     <header className="site-header">
@@ -24,9 +27,9 @@ export function NavBar() {
           </NavLink>
         ))}
       </nav>
-      <NavLink className="nav-cta" to="/plan">
+      <NavLink className="nav-cta" to={user ? dashboardPath : "/auth"}>
         <Plane size={17} />
-        Start planning
+        {user ? "Dashboard" : "Login"}
       </NavLink>
       <button
         className="icon-button mobile-menu"

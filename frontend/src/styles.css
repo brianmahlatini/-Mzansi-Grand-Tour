@@ -784,6 +784,291 @@ h3 {
   color: #9d2f1d;
 }
 
+.auth-page {
+  display: grid;
+  place-items: center;
+}
+
+.auth-panel {
+  width: min(520px, 100%);
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: var(--shadow);
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.auth-tabs button,
+.dashboard-sidebar button,
+.booking-panel button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+  color: var(--ink);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.auth-tabs button.active {
+  background: var(--ink);
+  color: white;
+}
+
+.auth-panel label {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.auth-panel input {
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 12px;
+}
+
+.auth-note {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.route-loading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: var(--paper);
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.dashboard-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  background: #f3efe5;
+}
+
+.dashboard-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 22px;
+  background: var(--night);
+  color: white;
+}
+
+.dashboard-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dashboard-sidebar nav {
+  display: grid;
+  gap: 8px;
+}
+
+.dashboard-sidebar nav a,
+.dashboard-sidebar button {
+  justify-content: flex-start;
+  padding: 12px;
+  color: rgba(255, 255, 255, 0.76);
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.dashboard-sidebar nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 8px;
+  font-weight: 800;
+}
+
+.dashboard-sidebar nav a.active,
+.dashboard-sidebar nav a:hover,
+.dashboard-sidebar button:hover {
+  background: rgba(255, 255, 255, 0.13);
+  color: white;
+}
+
+.dashboard-sidebar button {
+  margin-top: auto;
+}
+
+.dashboard-main {
+  padding: 34px;
+}
+
+.dashboard-topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+
+.dashboard-topbar h1 {
+  color: var(--ink);
+  font-size: clamp(2rem, 4vw, 4rem);
+}
+
+.role-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: white;
+  font-weight: 800;
+}
+
+.dashboard-stack {
+  display: grid;
+  gap: 18px;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+
+.metric-card,
+.dashboard-card,
+.booking-panel {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 18px 55px rgba(20, 28, 25, 0.08);
+}
+
+.metric-card {
+  padding: 20px;
+}
+
+.metric-card span {
+  display: block;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.metric-card strong {
+  display: block;
+  margin-top: 10px;
+  font-size: 2.1rem;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.dashboard-card {
+  padding: 22px;
+}
+
+.dashboard-card h2 {
+  font-size: 1.45rem;
+  line-height: 1.2;
+}
+
+.dashboard-row,
+.booking-panel {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.dashboard-row span,
+.booking-panel span,
+.dashboard-card p {
+  color: var(--muted);
+}
+
+.hero-dashboard-card {
+  background:
+    linear-gradient(90deg, rgba(12, 20, 18, 0.9), rgba(12, 20, 18, 0.42)),
+    url("https://commons.wikimedia.org/wiki/Special:FilePath/CapeTownPanoramaFromTableMountain.jpg?width=1600") center/cover;
+  color: white;
+}
+
+.hero-dashboard-card p {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.booking-panel {
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 14px;
+  margin-top: 12px;
+}
+
+.booking-panel div {
+  display: grid;
+  gap: 4px;
+}
+
+.cancel-form {
+  flex: 1 0 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+.cancel-form input,
+.dashboard-card select {
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 10px;
+  background: white;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+th {
+  color: var(--muted);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+}
+
 .site-footer {
   display: flex;
   justify-content: space-between;
@@ -831,7 +1116,8 @@ h3 {
   .destination-grid,
   .trust-section,
   .story-grid,
-  .video-grid {
+  .video-grid,
+  .metric-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -887,6 +1173,27 @@ h3 {
     margin: 0;
     padding: 128px 20px 64px;
     width: 100%;
+  }
+
+  .dashboard-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-sidebar {
+    position: static;
+    height: auto;
+  }
+
+  .dashboard-main {
+    padding: 20px;
+  }
+
+  .dashboard-topbar,
+  .dashboard-grid,
+  .metric-grid,
+  .cancel-form {
+    grid-template-columns: 1fr;
+    display: grid;
   }
 
   .experience-card div:last-child {

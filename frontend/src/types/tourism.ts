@@ -63,6 +63,83 @@ export interface BookingPayload {
   notes: string;
 }
 
+export type UserRole = "ADMIN" | "USER";
+
+export interface AuthUser {
+  id: number;
+  username: string;
+  email: string;
+  role: UserRole;
+  status: string;
+  createdAt?: string;
+  lastLoginAt?: string | null;
+}
+
+export interface AuthResponse {
+  user: AuthUser;
+  token: string;
+}
+
+export interface BookingRecord {
+  id: number;
+  user_id?: number | null;
+  username?: string | null;
+  full_name: string;
+  email: string;
+  destination: string;
+  guests: number;
+  arrival_date: string;
+  budget_range: string;
+  notes: string | null;
+  status: string;
+  cancellation_reason?: string | null;
+  cancelled_at?: string | null;
+  created_at: string;
+}
+
+export interface LeadRecord {
+  id: number;
+  user_id?: number | null;
+  full_name: string;
+  email: string;
+  travel_style: string;
+  dream_trip: string;
+  created_at: string;
+}
+
+export interface AuditEvent {
+  id: number;
+  user_id: number | null;
+  username?: string | null;
+  email?: string | null;
+  action: string;
+  entity_type: string;
+  entity_id: string | null;
+  metadata: Record<string, unknown>;
+  created_at: string;
+}
+
+export interface AdminDashboardData {
+  metrics: {
+    users: number;
+    bookings: number;
+    cancellations: number;
+    leads: number;
+    packages: number;
+  };
+  bookingsByStatus: Array<{ status: string; count: number }>;
+  recentBookings: BookingRecord[];
+  recentLeads: LeadRecord[];
+  recentUsers: AuthUser[];
+}
+
+export interface UserDashboardData {
+  user: AuthUser;
+  bookings: BookingRecord[];
+  leads: LeadRecord[];
+  nextTrip: BookingRecord | null;
+}
+
 export interface TourismData {
   destinations: Destination[];
   experiences: Experience[];

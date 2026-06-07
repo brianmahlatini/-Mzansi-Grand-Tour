@@ -5,8 +5,11 @@ import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 import { env } from "./config/env.js";
+import { adminRouter } from "./routes/adminRoutes.js";
+import { authRouter } from "./routes/authRoutes.js";
 import { contentRouter } from "./routes/contentRoutes.js";
 import { conversionRouter } from "./routes/conversionRoutes.js";
+import { userRouter } from "./routes/userRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 export function createApp() {
@@ -26,6 +29,9 @@ export function createApp() {
   });
 
   app.use("/api", contentRouter);
+  app.use("/api", authRouter);
+  app.use("/api", userRouter);
+  app.use("/api", adminRouter);
   app.use("/api", conversionRouter);
   app.use(errorHandler);
 
